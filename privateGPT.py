@@ -7,6 +7,7 @@ from langchain.vectorstores import Chroma
 from langchain.llms import GPT4All, LlamaCpp
 import os
 import argparse
+import json
 
 load_dotenv()
 
@@ -39,6 +40,15 @@ def main():
             exit;
     qa = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever, return_source_documents= not args.hide_source)
     # Interactive questions and answers
+    if("direct" in args):
+        query = args.direct
+        res = qa(query)
+        answer, docs = res['result'], [] if args.hide_source else res['source_documents']
+        print(json.dump({
+            query: query,
+            answer: answer,
+            docs: docs
+        }))
     while True:
         query = input("\nEnter a query: ")
         if query == "exit":
@@ -68,6 +78,9 @@ def parse_arguments():
     parser.add_argument("--mute-stream", "-M",
                         action='store_true',
                         help='Use this flag to disable the streaming StdOut callback for LLMs.')
+    parser.add_argument("--direct","-D",
+                        action='store_true',
+                        help='Use this to ask directly a question')
 
     return parser.parse_args()
 
