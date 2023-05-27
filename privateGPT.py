@@ -5,6 +5,8 @@ import sys
 class DummyOutput:
     def write(self, text):
         pass
+    def flush(self,x):
+        pass
 
 # Redirect stdout to the dummy object
 sys.stdout = DummyOutput()
@@ -55,7 +57,7 @@ def main():
         res = qa(query)
         answer, docs = res['result'], [] if args.hide_source else res['source_documents']
         print("\n JSON:")
-        print(docs)
+        #print(docs)
         references = [];
         for doc in docs:
             references.append({
