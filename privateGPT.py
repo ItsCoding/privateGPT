@@ -44,10 +44,10 @@ def main():
         query = args.direct
         res = qa(query)
         answer, docs = res['result'], [] if args.hide_source else res['source_documents']
-        print(json.dump({
-            query: query,
-            answer: answer,
-            docs: docs
+        print(json.dumps({
+            "query": query,
+            "answer": answer,
+            "docs": docs
         }))
     else:
         while True:
