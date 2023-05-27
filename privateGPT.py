@@ -47,7 +47,7 @@ def main():
         print(json.dumps({
             "query": query,
             "answer": answer,
-            "docs": docs
+            #"docs": docs
         }))
     else:
         while True:
