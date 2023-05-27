@@ -1,4 +1,14 @@
 #!/usr/bin/env python3
+import sys
+
+# Create a dummy object that discards any output
+class DummyOutput:
+    def write(self, text):
+        pass
+
+# Redirect stdout to the dummy object
+sys.stdout = DummyOutput()
+
 from dotenv import load_dotenv
 from langchain.chains import RetrievalQA
 from langchain.embeddings import HuggingFaceEmbeddings
@@ -46,10 +56,19 @@ def main():
         answer, docs = res['result'], [] if args.hide_source else res['source_documents']
         print("\n JSON:")
         print(docs)
+        references = [];
+        for doc in docs:
+            references.append({
+                "meta":doc.metadata,
+                "content": doc.page_content
+            })
+
+
+        sys.stdout = sys.__stdout__
         print(json.dumps({
             "query": query,
             "answer": answer,
-            #"docs": docs
+            "docs": references
         }))
     else:
         while True:
